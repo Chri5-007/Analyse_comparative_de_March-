@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.history/
+.venv/
+venv/
+exports/
+*.zip
+data/*
+!data/.gitkeep
