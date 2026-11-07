@@ -25,9 +25,8 @@ class Journal:
     def __init__(self):
         self.entrees = []
 
-    def ajouter(self, enseigne, reference, probleme, detail, traitement):
-        self.entrees.append({"enseigne": enseigne, "reference": reference,
-                             "probleme": probleme, "detail": detail, "traitement": traitement})
+    def ajouter(self, boutique, type_, element, detail):
+        self.entrees.append({"boutique": boutique, "type": type_, "element": element, "detail": detail})
 
 
 # ---------- Lecture ----------
@@ -107,18 +106,16 @@ def nettoyer(articles, journal):
         signature = (a["nom_brut"], a["prix_brut"], a["dispo_brut"], a["stock"], a["note"])
         if (e, ref) in vus:
             if vus[(e, ref)] == signature:
-                journal.ajouter(e, ref, "doublon", f"ligne {a['ligne']}, identique", "ligne supprimée")
+                journal.ajouter(e, "Doublon", a["nom_brut"].strip(),
+                                f"Plusieurs lignes pour le même produit ({ref}); ligne {a['ligne']} identique, supprimée")
             else:
-                journal.ajouter(e, ref, "doublon", f"ligne {a['ligne']}, contenu différent",
+                journal.ajouter(e, "Doublon", a["nom_brut"].strip(),
+                                f"Plusieurs lignes pour le même produit ({ref}); ligne {a['ligne']} différente, "
                                 "première occurrence conservée, à vérifier")
             continue
         vus[(e, ref)] = signature
 
         a["nom"] = nettoyer_nom(a["nom_brut"])
-        if a["nom"] != a["nom_brut"]:
-            journal.ajouter(e, ref, "espaces parasites", repr(a["nom_brut"]), "espaces normalisés")
-        if isinstance(a["prix_brut"], str) and a["prix_brut"]:
-            journal.ajouter(e, ref, "prix en texte", repr(a["prix_brut"]), "converti en entier")
 
         a["prix_affiche"] = convertir_prix(a["prix_brut"])
         a["remise"] = float(a["remise"] or 0)
@@ -126,17 +123,18 @@ def nettoyer(articles, journal):
 
         if a["prix_affiche"] is None:
             a["statut"] = "prix absent"
-            journal.ajouter(e, ref, "prix non exploitable", repr(a["prix_brut"]),
-                            "produit exclu des comparaisons")
+            brut = a["prix_brut"] if a["prix_brut"] not in (None, "") else "(vide)"
+            journal.ajouter(e, "Prix manquant", a["nom"], f"Prix inexploitable: {brut}")
         elif rupture:
             a["statut"] = "rupture"
-            journal.ajouter(e, ref, "rupture", a["nom"], "non retenu comme « le moins cher »")
+            if a["stock"] == 0:
+                motif = "Stock nul" if e == "Baobab Shop" else "Quantité en rayon nulle"
+            else:
+                motif = "Produit en rupture de stock"
+            journal.ajouter(e, "Indisponible", a["nom"], motif)
         else:
             a["statut"] = "ok"
 
-        if a["vendeur"] != e:
-            journal.ajouter(e, ref, "vendeur tiers", f"vendu par « {a['vendeur']} »",
-                            "conservé, signalé (le prix n'est pas celui de l'enseigne)")
         sortie.append(a)
     return sortie
 
@@ -176,13 +174,7 @@ def verifier_libelle(a, produit, journal):
     if marque in nom:
         return
     proches = get_close_matches(marque, re.findall(r"[\w\-]+", nom), n=1, cutoff=0.75)
-    if proches:
-        journal.ajouter(a["enseigne"], a["reference"], "libellé à corriger",
-                        f"« {proches[0]} » au lieu de « {produit['marque']} »",
-                        "faute probable, rapprochement conservé par référence")
-    else:
-        journal.ajouter(a["enseigne"], a["reference"], "marque absente du libellé", a["nom"],
-                        "rapprochement conservé par référence")
+    # Journal volontairement limité à : Doublon, Indisponible, Prix manquant
 
 
 def rapprocher(articles, catalogue, journal):
@@ -190,7 +182,6 @@ def rapprocher(articles, catalogue, journal):
     for a in articles:
         pid = CORRESPONDANCES[a["enseigne"]].get(a["reference"])
         if pid is None:
-            journal.ajouter(a["enseigne"], a["reference"], "non rapproché", a["nom"], "article ignoré")
             continue
         a["produit_id"] = pid
         verifier_libelle(a, catalogue[pid], journal)
@@ -217,14 +208,9 @@ def controler_prix(articles, med, journal):
         p = a["prix_affiche"]
         if p > SEUIL_ABERRANT * m or p < m / SEUIL_ABERRANT:
             a["statut"] = "prix aberrant"
-            journal.ajouter(a["enseigne"], a["reference"], "prix aberrant",
-                            f"{p} FCFA, médiane historique {m:.0f} FCFA",
-                            "produit exclu des comparaisons, à vérifier auprès de l'enseigne")
 
 
 def controler_historique(historique, journal):
     doublons = len(historique) - len({(h["date"], h["source"], h["produit_id"]) for h in historique})
     produits = len({h["produit_id"] for h in historique})
-    journal.ajouter("Historique", "-", "contrôle",
-                    f"{len(historique)} lignes, {produits} produits, doublons={doublons}",
-                    "aucun traitement nécessaire" if doublons == 0 else "doublons à traiter")
+    pass  # contrôle sans entrée dans le journal

@@ -85,9 +85,9 @@ def ecrire_exports(res):
     _ecrire_csv(dossiers, "historique_black_friday.csv", res["bf_detail"],
                 ["enseigne", "produit_id", "moyenne_semaine", "moyenne_annee", "ecart_pct"])
     _ecrire_csv(dossiers, "journal_nettoyage.csv", res["journal"],
-                ["enseigne", "reference", "probleme", "detail", "traitement"])
+                ["boutique", "type", "element", "detail"])
     _ecrire_texte(dossiers, "synthese.txt", "\n\n".join([rediger_synthese(res), rediger_panier(res["panier"]),
-                                                       rediger_black_friday(res["bf_resume"])]))
+                                            rediger_black_friday(res["bf_resume"])]))
     _ecrire_texte(dossiers, "complexite.txt", rediger_complexite(res["benchmark"]))
 
 
