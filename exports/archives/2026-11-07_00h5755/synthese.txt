@@ -1,0 +1,35 @@
+Produits comparables (dans au moins 2 enseignes) : 23
+
+Nombre de fois où l'enseigne est la moins chère :
+  Marché Lagune : 6
+  Baobab Shop : 9
+  Comptoir Ivoire : 8
+
+Écart moyen par rapport au prix le plus bas :
+  Marché Lagune : 3.8 %
+  Baobab Shop : 4.7 %
+  Comptoir Ivoire : 2.8 %
+
+Les trois produits où comparer rapporte le plus :
+  Bouilloire électrique 1,7 L : écart de 2400 FCFA (26.1 %), moins chère chez Comptoir Ivoire
+  Clé USB SanDisk 64 Go : écart de 1200 FCFA (19.7 %), moins chère chez Marché Lagune
+  Congélateur Nasco 200 L : écart de 24275 FCFA (16.0 %), moins chère chez Comptoir Ivoire
+
+Panier de rentrée
+
+Total dans une seule enseigne :
+  Marché Lagune : 426400 FCFA, incomplet, manque : Tecno Spark 20 128 Go
+  Baobab Shop : 491500 FCFA (panier complet)
+  Comptoir Ivoire : 484075 FCFA (panier complet)
+
+Achat optimisé (chaque article là où il est le moins cher) : 477575 FCFA
+  1 × Tecno Spark 20 128 Go : Baobab Shop à 75000 FCFA
+  1 × Lenovo IdeaPad 3 Core i3 8 Go 256 Go : Comptoir Ivoire à 287375 FCFA
+  2 × Clé USB SanDisk 64 Go : Marché Lagune à 6100 FCFA
+  1 × Disque dur externe Seagate 1 To : Marché Lagune à 37600 FCFA
+  1 × Micro-ondes Samsung 23 L : Baobab Shop à 65400 FCFA
+
+Black Friday (24–30/11/2025) contre moyenne annuelle, écart moyen par enseigne :
+  Marché Lagune : -11.3 %
+  Baobab Shop : -11.7 %
+  Comptoir Ivoire : 3.8 %

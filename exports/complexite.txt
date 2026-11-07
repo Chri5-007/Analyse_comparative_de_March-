@@ -1,0 +1,8 @@
+Mesure de complexité
+Lignes d'historique : 20876
+Requêtes (produit × enseigne) : 90
+Recherche naïve (parcours complet de la liste à chaque requête) : 171.3 ms
+Index dict : construction 6.8 ms, interrogations 0.29 ms
+Résultats identiques : oui
+
+Explication : la recherche naïve coûte O(n) par requête, soit O(n×m) pour m requêtes. L'index est construit une seule fois en O(n), puis chaque requête se fait en O(1) en moyenne, soit O(n+m) au total.
