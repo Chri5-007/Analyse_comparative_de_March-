@@ -3,7 +3,3 @@ __pycache__/
 .history/
 .venv/
 venv/
-exports/
-*.zip
-data/*
-!data/.gitkeep
